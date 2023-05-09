@@ -40,3 +40,45 @@ function drawGreenSquares() {
         }
     }
 }
+
+//draw discs on board
+
+var discs = [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 2, 1, 0, 0, 0],
+    [0, 0, 0, 1, 2, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+];
+
+function drawDiscs() {
+    discLayer.innerHTML = "";
+    for (var row = 0; row < 8; row++) {
+        for (var column = 0; column < 8; column++) {
+            var value = discs[row][column];
+            if (value == 0) {
+
+            }
+            else {
+                var disc = document.createElement("div");
+                disc.style.position = "absolute";
+                disc.style.width = cellWidth - 2;
+                disc.style.height = cellWidth - 2;
+                disc.style.borderRadius = "50%";
+                disc.style.left = (cellWidth + gap) * column + gap + 1;
+                disc.style.top = (cellWidth + gap) * row + gap + 1;
+
+                if (value == 1) {
+                    disc.style.backgroundColor = "black";
+                }
+                if (value == 2) {
+                    disc.style.backgroundColor = "white";
+                }
+                discLayer.appendChild(disc);
+            }
+        }
+    }
+}
