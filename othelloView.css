@@ -1,0 +1,21 @@
+#blackBackground {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: black;
+    height: 546;
+    width: 546;
+}
+
+#score {
+    position: absolute;
+    left: 0;
+    top: 550;
+    width: 550;
+    font-size: 50;
+    background-color: black;
+    color: white;
+    text-align: center;
+
+
+}
