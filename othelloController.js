@@ -24,6 +24,8 @@ var cellWidth = 65;
 var turn = 1;
 var Turn = "Black";
 
+var gameOver = false;
+
 window.onload = function () {
     scoreLable = document.getElementById("score");
     canMoveLayer = document.getElementById("canMoveLayer");
@@ -263,4 +265,80 @@ function getAffectedDiscs(id, row, column) {
     }
 
     return affectedDiscs;
+}
+
+// Decide if a cell is clickable
+function canClickSpot(id, row, column) {
+    var affectedDiscs = getAffectedDiscs(id, row, column);
+    if (affectedDiscs.length == 0)
+        return false;
+    else return true;
+}
+
+function canMove(id) {
+    for (var row = 0; row < 8; row++) {
+        for (var column = 0; column < 8; column++) {
+            if (canClickSpot(id, row, column)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+//flip discs from balck to white && white to black
+function flipDiscs(affectedDiscs) {
+    for (var i = 0; i < affectedDiscs.length; i++) {
+        var spot = affectedDiscs[i];
+        if (discs[spot.row][spot.column] == 1) {
+            discs[spot.row][spot.column] = 2;
+        }
+        else {
+            discs[spot.row][spot.column] = 1;
+        }
+    }
+
+}
+
+// Update the score
+function reWriteScore() {
+    var ones = 0;
+    var twos = 0;
+    for (var row = 0; row < 8; row++) {
+        for (var column = 0; column < 8; column++) {
+            var value = discs[row][column];
+            if (value == 1) ones += 1;
+            else if (value == 2) twos += 1;
+        }
+    }
+
+    if (turn == 2) Turn = "White";
+    else if (turn == 1) Turn = "Black";
+
+    scoreLable.innerHTML = "Turn: " + Turn + "<br />" + "Black: " + ones + " | " + "White: " + twos;
+}
+
+function clickedSquare(row, column) {
+    if (gameOver) return;
+
+    if (discs[row][column] != 0) {
+        return;
+    }
+    if (canClickSpot(turn, row, column) == true) {
+        var affectedDiscs = getAffectedDiscs(turn, row, column);
+        flipDiscs(affectedDiscs);
+        discs[row][column] = turn;
+        if (turn == 1 && canMove(2)) turn = 2;
+        else if (turn = 2 && canMove(1)) turn = 1;
+
+        if ((canMove(1) == false && canMove(2) == false)) {
+            alert("Game  Over");
+            gameOver = true;
+        }
+        drawDiscs();
+        drawCanMoveLayer();
+        reWriteScore();
+    }
+
 }
