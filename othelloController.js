@@ -181,4 +181,86 @@ function getAffectedDiscs(id, row, column) {
             couldBeAffected.push(discLocation);
         }
     }
+
+     //flip the down right
+    var couldBeAffected = [];
+    var rowIterator = row;
+    var columnIterator = column;
+    while (rowIterator < 7 && columnIterator < 7) {
+        rowIterator += 1;
+        columnIterator += 1;
+        var valueAtSpot = discs[rowIterator][columnIterator];
+        if (valueAtSpot == 0 || valueAtSpot == id) {
+            if (valueAtSpot == id) {
+                affectedDiscs = affectedDiscs.concat(couldBeAffected);
+            }
+            break;
+        }
+        else {
+            var discLocation = { row: rowIterator, column: columnIterator };
+            couldBeAffected.push(discLocation);
+        }
+    }
+
+    //flip the down left
+    var couldBeAffected = [];
+    var rowIterator = row;
+    var columnIterator = column;
+    while (rowIterator < 7 && columnIterator > 0) {
+        rowIterator += 1;
+        columnIterator -= 1;
+        var valueAtSpot = discs[rowIterator][columnIterator];
+        if (valueAtSpot == 0 || valueAtSpot == id) {
+            if (valueAtSpot == id) {
+                affectedDiscs = affectedDiscs.concat(couldBeAffected);
+            }
+            break;
+        }
+        else {
+            var discLocation = { row: rowIterator, column: columnIterator };
+            couldBeAffected.push(discLocation);
+        }
+    }
+
+    //flip the up right
+    var couldBeAffected = [];
+    var rowIterator = row;
+    var columnIterator = column;
+    while (rowIterator > 0 && columnIterator < 7) {
+        rowIterator -= 1;
+        columnIterator += 1;
+        var valueAtSpot = discs[rowIterator][columnIterator];
+        if (valueAtSpot == 0 || valueAtSpot == id) {
+            if (valueAtSpot == id) {
+                affectedDiscs = affectedDiscs.concat(couldBeAffected);
+            }
+            break;
+        }
+        else {
+            var discLocation = { row: rowIterator, column: columnIterator };
+            couldBeAffected.push(discLocation);
+        }
+    }
+
+    //flip the up left
+    var couldBeAffected = [];
+    var rowIterator = row;
+    var columnIterator = column;
+    while (rowIterator > 0 && columnIterator > 0) {
+        rowIterator -= 1;
+        columnIterator -= 1;
+        var valueAtSpot = discs[rowIterator][columnIterator];
+        if (valueAtSpot == 0 || valueAtSpot == id) {
+            if (valueAtSpot == id) {
+                affectedDiscs = affectedDiscs.concat(couldBeAffected);
+            }
+            break;
+        }
+        else {
+            var discLocation = { row: rowIterator, column: columnIterator };
+            couldBeAffected.push(discLocation);
+        }
+    }
+
+    return affectedDiscs;
 }
