@@ -84,6 +84,28 @@ function drawDiscs() {
     }
 }
 
+// draw circle showing the places where click is allowed.
+function drawCanMoveLayer() {
+    canMoveLayer.innerHTML = "";
+    for (let row = 0; row < 8; row++) {
+        for (let column = 0; column < 8; column++) {
+            let value = discs[row][column];
+            if (value === 0 && canClickSpot(turn, row, column)) {
+                let discOutline = document.createElement("div");
+                discOutline.style.position = "absolute";
+                discOutline.style.width = cellWidth - 8;
+                discOutline.style.height = cellWidth - 8;
+                discOutline.style.borderRadius = "50%";
+                discOutline.style.left = (cellWidth + gap) * column + gap + 2;
+                discOutline.style.top = (cellWidth + gap) * row + gap + 2;
+                discOutline.setAttribute("onclick", "clickedSquare(" + row + "," + column + ")");
+                if (turn === 1) discOutline.style.border = "2px solid black";
+                else if (turn === 2) discOutline.style.border = "2px solid white";
+                discLayer.appendChild(discOutline);
+            }
+        }
+    }
+}
 
 function getAffectedDiscs(id, row, column) {
     var affectedDiscs = [];
