@@ -1,6 +1,6 @@
 
 //------------------------(Discs Array)--------------------------------
-//Array of the Discs on board
+//Array for store the Discs on board
 
 var discs = [
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -13,8 +13,10 @@ var discs = [
     [0, 0, 0, 0, 0, 0, 0, 0]
 ];
 
+//----------------------------------------------------------------------
+
 //-------------------------(View)---------------------------------------
-//initial function for load the App in Browser.
+
 var scoreLable;
 var canMoveLayer;
 var blackBackground;
@@ -24,8 +26,7 @@ var cellWidth = 65;
 var turn = 1;
 var Turn = "Black";
 
-var gameOver = false;
-
+//initial function for load the App in Browser.
 window.onload = function () {
     scoreLable = document.getElementById("score");
     canMoveLayer = document.getElementById("canMoveLayer");
@@ -109,9 +110,102 @@ function drawCanMoveLayer() {
     }
 }
 
+// for show the Turn && Current Score.
+function reWriteScore() {
+    var ones = 0;
+    var twos = 0;
+    for (var row = 0; row < 8; row++) {
+        for (var column = 0; column < 8; column++) {
+            var value = discs[row][column];
+            if (value == 1) ones += 1;
+            else if (value == 2) twos += 1;
+        }
+    }
+
+    if (turn == 2) Turn = "White";
+    else if (turn == 1) Turn = "Black";
+
+    if((ones+twos)==64) gameOver=true;
+    winner=(ones>twos)?"Black":"White";
+
+    if(gameOver==true){
+            alert(`Game Over the winner is ${winner}`)
+        }
+
+ 
+
+    scoreLable.innerHTML = "Turn: " + Turn + "<br />" + "Black: " + ones + " | " + "White: " + twos;
+}
+
+//----------------------------------------------------------------------
+
+//-------------------------(Controller)---------------------------------
+
+var gameOver = false;
+var winner="";
+var aiPlayer=2;
+
+//click on green square && flip discs && finish of Game if all green square is filled.  
+function clickedSquare(row, column) {
+    if (gameOver) return;
+
+    if (discs[row][column] != 0) {
+        return;
+    }
+    if (canClickSpot(turn, row, column) == true) {
+        var affectedDiscs = getAffectedDiscs(turn, row, column);
+        flipDiscs(affectedDiscs);
+        discs[row][column] = turn;
+        if (turn == 1 && canMove(2)) turn = 2;
+        else if (turn = 2 && canMove(1)) turn = 1;
+
+        drawDiscs();
+        drawCanMoveLayer();
+        reWriteScore();
+    }
+
+}
+
+// can click on green square or no 
+function canMove(id) {
+    for (var row = 0; row < 8; row++) {
+        for (var column = 0; column < 8; column++) {
+            if (canClickSpot(id, row, column)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Decide if a cell is clickable
+function canClickSpot(id, row, column) {
+    var affectedDiscs = getAffectedDiscs(id, row, column);
+    if (affectedDiscs.length == 0)
+        return false;
+    else return true;
+}
+
+//flip discs from balck to white && white to black
+function flipDiscs(affectedDiscs) {
+    for (var i = 0; i < affectedDiscs.length; i++) {
+        var spot = affectedDiscs[i];
+        if (discs[spot.row][spot.column] == 1) {
+            discs[spot.row][spot.column] = 2;
+        }
+        else {
+            discs[spot.row][spot.column] = 1;
+        }
+    }
+
+}
+
+//get all discs can filped by click on any gree square.
 function getAffectedDiscs(id, row, column) {
     var affectedDiscs = [];
 
+    if(discs[row][column]==0)
+    {
     //flip the right
     var couldBeAffected = [];
     var columnIterator = column;
@@ -262,83 +356,18 @@ function getAffectedDiscs(id, row, column) {
             var discLocation = { row: rowIterator, column: columnIterator };
             couldBeAffected.push(discLocation);
         }
-    }
+    }}
 
     return affectedDiscs;
 }
 
-// Decide if a cell is clickable
-function canClickSpot(id, row, column) {
-    var affectedDiscs = getAffectedDiscs(id, row, column);
-    if (affectedDiscs.length == 0)
-        return false;
-    else return true;
-}
-
-function canMove(id) {
-    for (var row = 0; row < 8; row++) {
-        for (var column = 0; column < 8; column++) {
-            if (canClickSpot(id, row, column)) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
+//----------------------------------------------------------------------
 
 
-//flip discs from balck to white && white to black
-function flipDiscs(affectedDiscs) {
-    for (var i = 0; i < affectedDiscs.length; i++) {
-        var spot = affectedDiscs[i];
-        if (discs[spot.row][spot.column] == 1) {
-            discs[spot.row][spot.column] = 2;
-        }
-        else {
-            discs[spot.row][spot.column] = 1;
-        }
-    }
 
-}
 
-// Update the score
-function reWriteScore() {
-    var ones = 0;
-    var twos = 0;
-    for (var row = 0; row < 8; row++) {
-        for (var column = 0; column < 8; column++) {
-            var value = discs[row][column];
-            if (value == 1) ones += 1;
-            else if (value == 2) twos += 1;
-        }
-    }
 
-    if (turn == 2) Turn = "White";
-    else if (turn == 1) Turn = "Black";
 
-    scoreLable.innerHTML = "Turn: " + Turn + "<br />" + "Black: " + ones + " | " + "White: " + twos;
-}
 
-function clickedSquare(row, column) {
-    if (gameOver) return;
 
-    if (discs[row][column] != 0) {
-        return;
-    }
-    if (canClickSpot(turn, row, column) == true) {
-        var affectedDiscs = getAffectedDiscs(turn, row, column);
-        flipDiscs(affectedDiscs);
-        discs[row][column] = turn;
-        if (turn == 1 && canMove(2)) turn = 2;
-        else if (turn = 2 && canMove(1)) turn = 1;
 
-        if ((canMove(1) == false && canMove(2) == false)) {
-            alert("Game  Over");
-            gameOver = true;
-        }
-        drawDiscs();
-        drawCanMoveLayer();
-        reWriteScore();
-    }
-
-}
