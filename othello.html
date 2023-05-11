@@ -6,6 +6,54 @@
 </head>
 
 <body>
+    <div class="container">
+        <div class="title">Settings</div>
+        <div class="content">
+          <form action="#">
+            <div class="user-details">
+              <div class="mode-details">
+                    <input type="radio" name="mode" id="dot-1">
+                    <input type="radio" name="mode" id="dot-2">
+                    <input type="radio" name="mode" id="dot-3">
+                    <span class="mode-title">Mode</span>
+                    <div class="category">
+                        <label for="dot-1">
+                        <span class="dot one"></span>
+                        <span class="gender">human vs human</span>
+                    </label>
+                    <label for="dot-2">
+                        <span class="dot two"></span>
+                        <span class="gender">human vs computer</span>
+                    </label>
+                    <label for="dot-3">
+                        <span class="dot three"></span>
+                        <span class="gender">computer vs computer</span>
+                        </label>
+                    </div>
+              </div>
+              <br>
+              <div class="input-box">
+                <span class="details">Difficulty level of player 1</span>
+                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="10" required>
+    
+              </div>
+              <div class="input-box">
+                <span class="details">Difficulty level of player 2</span>
+                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="10" required>
+              </div>
+            </div>
+            <div class="buttons">
+                <div class="button">
+                    <input type="submit" value="Play">
+                </div>
+                <div class="button">
+                    <input type="reset" value="Reset">
+                </div>
+            </div>
+    
+          </form>
+        </div>
+      </div>
     <div id="blackBackground"></div>
     <div id="discLayer"></div>
     <div id="score">
