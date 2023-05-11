@@ -25,6 +25,7 @@ var gap = 3;
 var cellWidth = 65;
 var turn = 1;
 var Turn = "Black";
+var gameMode = 'AI1';
 
 //initial function for load the App in Browser.
 window.onload = function () {
@@ -110,6 +111,18 @@ function drawCanMoveLayer() {
     }
 }
 
+// draw circle showing the places where  click is allowed.
+function getPossibleMoves(boardState, turn) {
+	let moves = [];
+	for (let row = 0; row < 8; row++)
+		for (let column = 0; column < 8; column++) {
+			let value = boardState[row][column];
+			if (value === 0 && canClickSpot(turn, row, column)) moves.push([row, column]);
+		}
+
+	return moves;
+}
+
 // for show the Turn && Current Score.
 function reWriteScore() {
     var ones = 0;
@@ -156,7 +169,21 @@ function clickedSquare(row, column) {
         var affectedDiscs = getAffectedDiscs(turn, row, column);
         flipDiscs(affectedDiscs);
         discs[row][column] = turn;
-        if (turn == 1 && canMove(2)) turn = 2;
+        if (turn == 1 && canMove(2)) {
+            turn = 2;
+            switch (gameMode) {
+                case 'AI1':
+                    AIVersionOne();
+                    break;
+
+                case 'AI2':
+                    AIVersionTwo(2);
+                    break;
+
+                default:
+                    break;
+            }
+        }
         else if (turn = 2 && canMove(1)) turn = 1;
 
         drawDiscs();
@@ -361,13 +388,73 @@ function getAffectedDiscs(id, row, column) {
     return affectedDiscs;
 }
 
-//----------------------------------------------------------------------
+//------------------------------AI----------------------------------------
 
+function AIVersionOne() {
+    let moves = getPossibleMoves(discs, turn);
+    if (moves.length > 0) {
+        console.log(moves);
+        let bestMove = moves[0];
+        let bestScore = getAffectedDiscs(2, bestMove[0], bestMove[1]).length;
+        for (let move of moves) {
+            let score = getAffectedDiscs(2, move[0], move[1]).length;
+            if (score > bestScore) {
+                bestMove = move;
+                bestScore = score;
+            }
+        }
+        console.log(bestScore, bestMove);
+        setTimeout(() => {
+            clickedSquare(bestMove[0], bestMove[1]);
+        }, 100);
+    }
+}
 
+// A Tree node
+class Node {
+    constructor(x, r, c) {
+        this.score = x;
+        this.move = [r, c];
+        this.children = [];
+    }
+}
 
+function AIVersionTwo(limit, turn3, tree, state) {
+    turn3 = turn3 || turn;
+    if (!state) {
+        state = [];
+        discs.forEach((arr, i) => (state[i] = [...arr]));
+    }
+    if (!tree) {
+        tree = new Node(0);
+        let moves = getPossibleMoves(state, turn3);
+        if (moves.length > 0) {
+            moves.forEach(move => {
+                let score = getAffectedDiscs(turn3, move[0], move[1]).length;
+                tree.children.push(new Node(score, move[0], move[1]));
+            });
+            // setTimeout(() => clickedSquare(), 100);
+        }
+        console.log(tree);
+    } else {
+        if (tree.children.length > 0) {
+            console.log(tree.children);
+        }
+    }
+    if (limit > 0) AIVersionTwo(limit - 1, 3 - turn3, tree, state);
+}
 
-
-
-
-
-
+function comLevel(children, turn3, tree, state) {
+    children.forEach(child => {
+        state[child.move[0]][child.move[1]] = turn3;
+        let moves = getPossibleMoves(state, turn3);
+        if (moves.length > 0) {
+            moves.forEach(move => {
+                let score = getAffectedDiscs(turn3, move[0], move[1]).length;
+                tree.children.push(new Node(score, move[0], move[1]));
+            });
+            // setTimeout(() => clickedSquare(), 100);
+        }
+    });
+    console.log(tree);
+}
