@@ -458,3 +458,25 @@ function comLevel(children, turn3, tree, state) {
     });
     console.log(tree);
 }
+function minimax(tree,limit,maxmizingPlayer){
+    if (limit==0)
+    return tree.score;
+    //maxmizer player (ai player)
+    if(maxmizingPlayer){                    
+        let maxEval = 0;
+        tree.children.forEach(child =>{
+            let eval =minimax(child.children,limit-1,false);
+            maxEval=math.max(maxEval,eval);
+        })
+        return maxEval;
+    }     
+    //minimizer player
+    else{
+        minEval=100
+        tree.children.forEach(child =>{
+            let eval =minimax(child.children,limit-1,true);
+            minEval=math.min(minEval,eval);
+        })
+        return minEval;
+    }
+}
