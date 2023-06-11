@@ -13,9 +13,9 @@
           <form action="#">
             <div class="user-details">
               <div class="mode-details">
-                <input type="radio" name="mode" id="dot-1">
-                <input type="radio" name="mode" id="dot-2" checked>
-                <input type="radio" name="mode" id="dot-3">
+                <input type="radio" name="mode" id="dot-1" onchange="ResetButton()">
+                <input type="radio" name="mode" id="dot-2" checked onchange="ResetButton()">
+                <input type="radio" name="mode" id="dot-3"onchange="ResetButton()">
                 <span class="mode-title">Mode</span>
                 <div class="category">
                   <label for="dot-1">
@@ -43,13 +43,13 @@
               </div>
               <div class="input-box" id="input-box-3">
                 <span class="details">Difficulty level of AI</span>
-                <input type="number" id="AI" name="quantity" onchange="getVal()" placeholder="0" min="0" max="5" required >
+                <input type="number" id="AI" name="quantity" placeholder="0" min="0" max="5" required >
               </div>
             </div>
             
             <div class="buttons">
               <div class="button">
-                <input type="submit" value="Play" onclick="assign()">
+                <input type="submit" value="Play" onclick="assign(event)">
               </div>
               <div class="button">
                 <input type="reset" value="Reset" onclick="location.reload()" id="button-reset">  
@@ -77,23 +77,7 @@
       <p class="message" id="winnerMessage"></p>
       </div>
   
-    <script>
-      function showPopupMessage(winnerName) {
-        var popupMessage = document.querySelector('.popup-message');
-        var winnerMessage = document.querySelector('#winnerMessage');
-        winnerMessage.textContent = 'GameOver,The Winner is ' + winnerName;
-        popupMessage.classList.add('show');
   
-        setTimeout(function() {
-          popupMessage.classList.remove('show');
-       }, 4000); // Hide the popup message after 4 seconds 
-      }
-  
-      function ResetButton() {
-      var button = document.getElementById('button-reset');
-      button.click();
-    }
-    </script>
 
   </body>
 

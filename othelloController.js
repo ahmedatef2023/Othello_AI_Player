@@ -20,10 +20,10 @@ var dot3;
 var AIInput;
 var AIInput1;
 var AIInput2;
+var canplay =0;
 
 
 var globalDepth;
-console.log("level",globalDepth);
 var globalDepth1;
 var globalDepth2;
 
@@ -37,7 +37,6 @@ let cellWidth = 65;
 let turn = 1;
 let Turn = 'Black';
 var gameMode;
-console.log("game mode",gameMode);
 
 //initial function for load the App in Browser.
 window.onload = function () {
@@ -75,17 +74,20 @@ window.onload = function () {
                   inputBox1.style.display = 'none';
                   inputBox2.style.display = 'none';
                   inputBox3.style.display = 'none';
+				  
                 } 
                 if(dot2.checked) {
                   inputBox1.style.display = 'none';
                   inputBox2.style.display = 'none';
                   inputBox3.style.display = 'block';
+				  
                 }
                 if(dot3.checked)
                 {
                   inputBox1.style.display = 'block';
                   inputBox2.style.display = 'block';
                   inputBox3.style.display = 'none';
+				  
                 }
               }
             
@@ -95,7 +97,7 @@ window.onload = function () {
             
               // Initial state
               toggleInputBoxes();
-              console.log("finally",AIInput.value)
+             
             
 	scoreLabel = document.getElementById('score');
 	canMoveLayer = document.getElementById('canMoveLayer');
@@ -104,26 +106,59 @@ window.onload = function () {
 	drawGreenSquares();
 	drawDiscs();
 	drawCanMoveLayer();
-};
-function getVal() {
-    const val = document.getElementById('AI').value;
-    console.log("new",val);
-  }
 
-function assign(){
+};
+
+function assign(event){
+	event.preventDefault();
+	canplay=1;
+	AIInput = document.getElementById('AI');  // level human vs AI          
+    AIInput1 = document.getElementById('AI1');// level AI1
+    AIInput2 = document.getElementById('AI2');// level AI2
+
     if (dot1.checked) gameMode='H2H';
     else if (dot2.checked){
         gameMode='H2A';
-        globalDepth=AIInput;
+        globalDepth=AIInput.value;
     } 
     else if (dot3.checked){
         gameMode='A2A';
-        globalDepth1=AIInput1;
-        globalDepth2=AIInput2;
+        globalDepth1=AIInput1.value;
+        globalDepth2=AIInput2.value;
     } 
+	console.log("level",globalDepth);
+	console.log("Game Mode",gameMode);
+	
 
-    
 }
+
+function showPopupMessage(winnerName) {
+	var popupMessage = document.querySelector('.popup-message');
+	var winnerMessage = document.querySelector('#winnerMessage');
+	winnerMessage.textContent = winnerName;
+	popupMessage.classList.add('show');
+
+	setTimeout(function() {
+	  popupMessage.classList.remove('show');
+   }, 4000); // Hide the popup message after 4 seconds 
+  }
+  function ResetButton() {
+	
+	discs = [
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 2, 1, 0, 0, 0],
+		[0, 0, 0, 1, 2, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0],
+		[0, 0, 0, 0, 0, 0, 0, 0]
+	];
+	drawGreenSquares();
+	drawDiscs();
+	drawCanMoveLayer();
+	
+  }
 
 //draw 64 green Square by js DOM.
 function drawGreenSquares() {
@@ -270,9 +305,11 @@ function canMove(id) {
 
 // Decide if a cell is clickable
 function canClickSpot(id, row, column) {
+	
 	let affectedDiscs = getAffectedDiscs(id, row, column);
-	if (affectedDiscs.length === 0) return false;
+	if (affectedDiscs.length === 0 || canplay===0) return false;
 	else return true;
+	
 }
 
 //flip discs from black to white && white to black
