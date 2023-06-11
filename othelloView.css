@@ -183,7 +183,7 @@ form .user-details .input-box{
   top: -66px; /* Initial position above the viewport */
   left: 50%;
   height: 66px;
-  width: 400px;
+  width: 450px;
   transform: translateX(-50%);
   padding: 20px;
   background-color: #f1f1f1;
@@ -191,7 +191,7 @@ form .user-details .input-box{
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   opacity: 0;
   visibility: hidden;
-  transition: top 0.9s ease-in-out, opacity 0.9s ease-in-out, visibility 0.9s ease-in-out;
+  transition: top 0.7s ease-in-out, opacity 0.7s ease-in-out, visibility 0.7s ease-in-out;
   z-index: 9999;
 }
 
@@ -200,7 +200,7 @@ form .user-details .input-box{
   opacity: 70%;
   visibility: visible;
   height: 66px;
-  width: 400px;
+  width: 450px;
 }
 
 .popup-message.hide {
@@ -215,4 +215,15 @@ form .user-details .input-box{
   font-weight: normal;
   color: #000;
   margin-bottom: 20px;
+}
+
+.Overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: black;
+  height: 546;
+  width: 546;
+  opacity: 0%;
+  cursor: pointer;
 }

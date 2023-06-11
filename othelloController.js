@@ -20,13 +20,10 @@ var dot3;
 var AIInput;
 var AIInput1;
 var AIInput2;
-var canplay =0;
-
 
 var globalDepth;
 var globalDepth1;
 var globalDepth2;
-
 
 let scoreLabel;
 let canMoveLayer;
@@ -106,12 +103,22 @@ window.onload = function () {
 	drawGreenSquares();
 	drawDiscs();
 	drawCanMoveLayer();
-
+	// showing overlay to disable clicks untill user adjust setting and press play
+	Overlayshow(); 
 };
+
+function Overlayhide() { //hides the overlay that prevent the user to click on the board
+	var overlay = document.querySelector('.Overlay');
+	overlay.style.display = 'none';
+	  }
+	function Overlayshow() { //Shows the overlay that prevent the user to click on the board
+	var overlay = document.querySelector('.Overlay');
+	overlay.style.display = 'block';
+	  }
 
 function assign(event){
 	event.preventDefault();
-	canplay=1;
+	Overlayhide();
 	AIInput = document.getElementById('AI');  // level human vs AI          
     AIInput1 = document.getElementById('AI1');// level AI1
     AIInput2 = document.getElementById('AI2');// level AI2
@@ -140,9 +147,9 @@ function showPopupMessage(winnerName) {
 
 	setTimeout(function() {
 	  popupMessage.classList.remove('show');
-   }, 4000); // Hide the popup message after 4 seconds 
+   }, 2000); // Hide the popup message after 4 seconds 
   }
-  function ResetButton() {
+  function ResetGamingboard() {
 	
 	discs = [
 		[0, 0, 0, 0, 0, 0, 0, 0],
@@ -157,7 +164,7 @@ function showPopupMessage(winnerName) {
 	drawGreenSquares();
 	drawDiscs();
 	drawCanMoveLayer();
-	
+	Overlayshow();
   }
 
 //draw 64 green Square by js DOM.
@@ -248,7 +255,7 @@ function checkWinner() {
 	const [black, white] = reWriteScore();
 	if (black + white === 64) {
 		const winner = black > white ? 'black' : black < white ? 'white' : 'tie';
-		showPopupMessage(winner);
+		showPopupMessage("Gameover , The Winner is "+winner);
 		return winner;
 	}
 	return 1;
@@ -307,7 +314,7 @@ function canMove(id) {
 function canClickSpot(id, row, column) {
 	
 	let affectedDiscs = getAffectedDiscs(id, row, column);
-	if (affectedDiscs.length === 0 || canplay===0) return false;
+	if (affectedDiscs.length === 0) return false;
 	else return true;
 	
 }
