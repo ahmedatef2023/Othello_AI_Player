@@ -13,43 +13,100 @@
           <form action="#">
             <div class="user-details">
               <div class="mode-details">
-                    <input type="radio" name="mode" id="dot-1">
-                    <input type="radio" name="mode" id="dot-2">
-                    <input type="radio" name="mode" id="dot-3">
-                    <span class="mode-title">Mode</span>
-                    <div class="category">
-                        <label for="dot-1">
-                        <span class="dot one"></span>
-                        <span class="gender">human vs human</span>
-                    </label>
-                    <label for="dot-2">
-                        <span class="dot two"></span>
-                        <span class="gender">human vs computer</span>
-                    </label>
-                    <label for="dot-3">
-                        <span class="dot three"></span>
-                        <span class="gender">computer vs computer</span>
-                        </label>
-                    </div>
+                <input type="radio" name="mode" id="dot-1">
+                <input type="radio" name="mode" id="dot-2" checked>
+                <input type="radio" name="mode" id="dot-3">
+                <span class="mode-title">Mode</span>
+                <div class="category">
+                  <label for="dot-1">
+                    <span class="dot one"></span>
+                    <span class="gender">human vs human</span>
+                  </label>
+                  <label for="dot-2">
+                    <span class="dot two"></span>
+                    <span class="gender">human vs computer</span>
+                  </label>
+                  <label for="dot-3">
+                    <span class="dot three"></span>
+                    <span class="gender">computer vs computer</span>
+                  </label>
+                </div>
               </div>
               <br>
-              <div class="input-box">
+              <div class="input-box" id="input-box-1">
                 <span class="details">Difficulty level of player 1</span>
-                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="10" required>
-    
+                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="4" required>
               </div>
-              <div class="input-box">
+              <div class="input-box" id="input-box-2">
                 <span class="details">Difficulty level of player 2</span>
-                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="10" required>
+                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="4" required>
+              </div>
+              <div class="input-box" id="input-box-3">
+                <span class="details">Difficulty level of AI</span>
+                <input type="number" id="AI" name="quantity" placeholder="0" min="0" max="4" required>
               </div>
             </div>
+            
+            <script>
+              const dot1 = document.getElementById('dot-1');
+              const dot2 = document.getElementById('dot-2');
+              const dot3 = document.getElementById('dot-3');
+              const inputBox1 = document.getElementById('input-box-1');
+              const inputBox2 = document.getElementById('input-box-2');
+              const inputBox3 = document.getElementById('input-box-3');
+              const AIInput = document.getElementById('AI');
+              const AIInput1 = document.getElementById('AI1');
+              const AIInput2 = document.getElementById('AI2');
+
+              //making sure user can't force input value more than 4
+              AIInput.addEventListener('input', function() {
+                  if (parseFloat(AIInput.value) > 4) {
+                        AIInput.value = '4';
+                                        }});
+              AIInput1.addEventListener('input', function() {
+                  if (parseFloat(AIInput1.value) > 4) {
+                        AIInput1.value = '4';
+                                        }});
+              AIInput2.addEventListener('input', function() {
+                  if (parseFloat(AIInput2.value) > 4) {
+                        AIInput2.value = '4';
+                                        }});
+
+              // greater number to be displayed is 4
+              function toggleInputBoxes() {
+                if (dot1.checked) {
+                  inputBox1.style.display = 'none';
+                  inputBox2.style.display = 'none';
+                  inputBox3.style.display = 'none';
+                } 
+                if(dot2.checked) {
+                  inputBox1.style.display = 'block';
+                  inputBox2.style.display = 'block';
+                  inputBox3.style.display = 'none';
+                }
+                if(dot3.checked)
+                {
+                  inputBox1.style.display = 'none';
+                  inputBox2.style.display = 'none';
+                  inputBox3.style.display = 'block';
+                }
+              }
+            
+              dot1.addEventListener('change', toggleInputBoxes);
+              dot2.addEventListener('change', toggleInputBoxes);
+              dot3.addEventListener('change', toggleInputBoxes);
+            
+              // Initial state
+              toggleInputBoxes();
+            </script>
+            
             <div class="buttons">
                 <div class="button">
                     <input type="submit" value="Play">
                 </div>
                 <div class="button">
-                    <input type="reset" value="Reset">
-                </div>
+                  <input type="reset" value="Reset"  onclick="location.reload()">
+                </div>                
             </div>
     
           </form>
@@ -65,6 +122,8 @@
         Black: 2 | White: 2 </div>
       <div id="canMoveLayer"></div>
     <script  src="othelloController.js"></script>
+
+
 </body>
 
 </html>
