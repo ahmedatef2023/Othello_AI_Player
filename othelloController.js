@@ -135,6 +135,8 @@ function assign(event){
     } 
 	console.log("level",globalDepth);
 	console.log("Game Mode",gameMode);
+    console.log("level A1",globalDepth1);
+    console.log("level A2",globalDepth2);
 	
 
 }
@@ -263,6 +265,7 @@ function checkWinner() {
 
 //click on green square && flip discs && finish of Game if all green square is filled.
 function clickedSquare(row, column) {
+    console.log(turn)
 	if (discs[row][column] !== 0) {
 		return;
 	}
@@ -275,20 +278,65 @@ function clickedSquare(row, column) {
 			switch (gameMode) {
 				case 'H2A':
 					setTimeout(function () {
-						makeAIMove();
+						makeAIMove1();
+					}, 100);
+					break;
+                case 'A2A':
+					setTimeout(function () {
+						makeAIMove1();
 					}, 100);
 					break;
 				default:
 					break;
 			}
-		} else if (turn === 1 && !canMove(2)) turn = 1;
-		else if (turn === 2 && canMove(1)) turn = 1;
+		} else if (turn === 1 && !canMove(2))
+        {
+			turn = 1;
+			switch (gameMode) {
+				case 'H2A':
+					setTimeout(function () {
+						makeAIMove1();
+					}, 100);
+					break;
+                case 'A2A':
+					setTimeout(function () {
+						makeAIMove2();
+					}, 100);
+					break;
+				default:
+					break;
+			}
+		}
+		else if (turn === 2 && canMove(1))
+        {
+			turn = 1;
+			switch (gameMode) {
+				case 'H2A':
+					setTimeout(function () {
+						makeAIMove1();
+					}, 100);
+					break;
+                case 'A2A':
+					setTimeout(function () {
+						makeAIMove2();
+					}, 100);
+					break;
+				default:
+					break;
+			}
+		}
+
 		else if (turn === 2 && !canMove(1)) {
 			turn = 2;
 			switch (gameMode) {
 				case 'H2A':
 					setTimeout(function () {
-						makeAIMove();
+						makeAIMove1();
+					}, 100);
+					break;
+                case 'A2A':
+					setTimeout(function () {
+						makeAIMove1();
 					}, 100);
 					break;
 				default:
@@ -466,7 +514,8 @@ function getAffectedDiscs(id, row, column) {
 
 //------------------------------AI----------------------------------------
 
-function makeAIMove() {
+
+function makeAIMove1() {
 	let bestScore = -Infinity;
 	let bestMove;
 
@@ -477,7 +526,7 @@ function makeAIMove() {
 				flipDiscs(affectedDiscs);
 				let tempBoard = JSON.parse(JSON.stringify(discs));
 				tempBoard[row][column] = 2;
-				const score = minimax(tempBoard, globalDepth, false);
+				const score = minimax(tempBoard, (globalDepth || globalDepth1), false);
 				if (score === 'white') bestMove = { row, column };
 				else if (score > bestScore) {
 					bestScore = score;
@@ -496,12 +545,26 @@ function makeAIMove() {
 		discs[bestMove.row][bestMove.column] = 2;
 		if (turn === 1 && canMove(2)) turn = 2;
 		else if (turn === 2 && canMove(1)) turn = 1;
-		else if (turn === 1 && !canMove(2)) turn = 1;
+		else if (turn === 1 && !canMove(2)){
+            turn = 1;
+            switch (gameMode) {
+                case 'H2A':
+                    setTimeout(() => makeAIMove1(), 100);
+                    break;
+                case 'A2A':
+                    setTimeout(() => makeAIMove2(), 100);
+                    break;
+                default:
+                    break;
+        }}
 		else if (turn === 2 && !canMove(1)) {
 			turn = 2;
 			switch (gameMode) {
 				case 'H2A':
-					setTimeout(() => makeAIMove(), 100);
+					setTimeout(() => makeAIMove1(), 100);
+					break;
+                case 'A2A':
+					setTimeout(() => makeAIMove1(), 100);
 					break;
 				default:
 					break;
@@ -514,6 +577,70 @@ function makeAIMove() {
 		checkWinner();
 	}
 }
+function makeAIMove2() {
+	let bestScore = -Infinity;
+	let bestMove;
+
+	for (let row = 0; row < 8; row++) {
+		for (let column = 0; column < 8; column++) {
+			if (discs[row][column] === 0 && canClickSpot(1, row, column)) {
+				let affectedDiscs = getAffectedDiscs(1, row, column);
+				flipDiscs(affectedDiscs);
+				let tempBoard = JSON.parse(JSON.stringify(discs));
+				tempBoard[row][column] = 1;
+				const score = minimax(tempBoard, globalDepth1, false);
+				if (score === 'black') bestMove = { row, column };
+				else if (score > bestScore) {
+					bestScore = score;
+					bestMove = { row, column };
+				}
+				// Undo the move
+				tempBoard[row][column] = 0;
+				flipDiscs(affectedDiscs.reverse());
+			}
+		}
+	}
+
+	if (bestMove) {
+		let affectedDiscs = getAffectedDiscs(1, bestMove.row, bestMove.column);
+		flipDiscs(affectedDiscs);
+		discs[bestMove.row][bestMove.column] = 1;
+		if (turn === 1 && canMove(2)) turn = 2;
+		else if (turn === 2 && canMove(1)) turn = 1;
+		else if (turn === 1 && !canMove(2)) {
+           turn = 1; 
+			switch (gameMode) {
+				case 'A2A':
+					setTimeout(() => makeAIMove2(), 100);
+					break;
+                case 'H2A':
+                    setTimeout(() => makeAIMove1(), 100);
+                    break;
+				default:
+					break;
+			}
+        }
+		else if (turn === 2 && !canMove(1)) {
+			turn = 2;
+			switch (gameMode) {
+				case 'H2A':
+					setTimeout(() => makeAIMove1(), 100);
+					break;
+                case 'A2A':
+                    setTimeout(() => makeAIMove1(), 100);
+                    break;
+				default:
+					break;
+			}
+		}
+
+		drawDiscs();
+		drawCanMoveLayer();
+		reWriteScore();
+		checkWinner();
+	}
+}
+
 
 function minimax(board, depth, maximizingPlayer) {
 	const result = checkWinner();

@@ -13,9 +13,9 @@
           <form action="#">
             <div class="user-details">
               <div class="mode-details">
-                <input type="radio" name="mode" id="dot-1" onchange="Resetboard()">
-                <input type="radio" name="mode" id="dot-2" checked onchange="Resetboard()">
-                <input type="radio" name="mode" id="dot-3"onchange="Resetboard()">
+                <input type="radio" name="mode" id="dot-1" onchange="ResetGamingboard()">
+                <input type="radio" name="mode" id="dot-2" checked onchange="ResetGamingboard()">
+                <input type="radio" name="mode" id="dot-3"onchange="ResetGamingboard()">
                 <span class="mode-title">Mode</span>
                 <div class="category">
                   <label for="dot-1">
@@ -39,7 +39,7 @@
               </div>
               <div class="input-box" id="input-box-2">
                 <span class="details">Difficulty level of player 2</span>
-                <input type="number" id="AI2" name="quantity" placeholder="0" in="0" max="5" oninput="ResetGamingboard()" >
+                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="5" oninput="ResetGamingboard()" >
               </div>
               <div class="input-box" id="input-box-3">
                 <span class="details">Difficulty level of AI</span>
