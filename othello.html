@@ -35,15 +35,15 @@
               <br>
               <div class="input-box" id="input-box-1">
                 <span class="details">Difficulty level of player 1</span>
-                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="4" required>
+                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="5" required>
               </div>
               <div class="input-box" id="input-box-2">
                 <span class="details">Difficulty level of player 2</span>
-                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="4" required>
+                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="5" required>
               </div>
               <div class="input-box" id="input-box-3">
                 <span class="details">Difficulty level of AI</span>
-                <input type="number" id="AI" name="quantity" placeholder="0" min="0" max="4" required>
+                <input type="number" id="AI" name="quantity" placeholder="0" min="0" max="5" required>
               </div>
             </div>
             
@@ -60,19 +60,19 @@
 
               //making sure user can't force input value more than 4
               AIInput.addEventListener('input', function() {
-                  if (parseFloat(AIInput.value) > 4) {
-                        AIInput.value = '4';
+                  if (parseFloat(AIInput.value) > 5) {
+                        AIInput.value = '5';
                                         }});
               AIInput1.addEventListener('input', function() {
-                  if (parseFloat(AIInput1.value) > 4) {
-                        AIInput1.value = '4';
+                  if (parseFloat(AIInput1.value) > 5) {
+                        AIInput1.value = '5';
                                         }});
               AIInput2.addEventListener('input', function() {
-                  if (parseFloat(AIInput2.value) > 4) {
-                        AIInput2.value = '4';
+                  if (parseFloat(AIInput2.value) > 5) {
+                        AIInput2.value = '5';
                                         }});
 
-              // greater number to be displayed is 4
+              // greater number to be displayed is 5
               function toggleInputBoxes() {
                 if (dot1.checked) {
                   inputBox1.style.display = 'none';
@@ -99,9 +99,13 @@
               // Initial state
               toggleInputBoxes();
             </script>
+
             <div class="buttons">
-              <div class="button" style="margin-left: 54px;">
-                <input type="reset" value="Reset" onclick="location.reload()">
+              <div class="button">
+                <input type="submit" value="Play">
+              </div>
+              <div class="button">
+                <input type="reset" value="Reset" onclick="location.reload()" id="button-reset">  
               </div>
             </div>
             
@@ -120,6 +124,31 @@
       <div id="canMoveLayer"></div>
     <script  src="othelloController.js"></script>
 
+    
+
+    <div class="popup-message">
+      <p class="message" id="winnerMessage"></p>
+      </div>
+  
+    <script>
+      function showPopupMessage(winnerName) {
+        var popupMessage = document.querySelector('.popup-message');
+        var winnerMessage = document.querySelector('#winnerMessage');
+        winnerMessage.textContent = 'GameOver,The Winner is ' + winnerName;
+        popupMessage.classList.add('show');
+  
+        setTimeout(function() {
+          popupMessage.classList.remove('show');
+       }, 4000); // Hide the popup message after 4 seconds 
+      }
+  
+      function ResetButton() {
+      var button = document.getElementById('button-reset');
+      button.click();
+    }
+    </script>
+
+  </body>
 
 </body>
 

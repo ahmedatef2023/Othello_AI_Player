@@ -9,7 +9,7 @@
 body{
   height: 100vh;
   display: flex;
-
+  background-image: image("download.png");
   padding: 10px;
   background: linear-gradient(112.1deg, rgb(32, 38, 57) 11.4%, rgb(63, 76, 119) 70.2%);
 }
@@ -114,8 +114,8 @@ form .input-box span.details{
     justify-content: space-between;
  }
  form .button input{
-   height: 130%;
-   width: 170%;
+   height: 100%;
+   width: 100%;
    border-radius: 5px;
    border: none;
    color: #fff;
@@ -174,4 +174,45 @@ form .user-details .input-box{
     text-align: center;
 
 
+}
+
+/*              Pop-up Massage        */
+
+.popup-message {
+  position: fixed;
+  top: -66px; /* Initial position above the viewport */
+  left: 50%;
+  height: 66px;
+  width: 400px;
+  transform: translateX(-50%);
+  padding: 20px;
+  background-color: #f1f1f1;
+  border-radius: 28px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transition: top 0.9s ease-in-out, opacity 0.9s ease-in-out, visibility 0.9s ease-in-out;
+  z-index: 9999;
+}
+
+.popup-message.show {
+  top: 110px; /* Final position when shown */
+  opacity: 70%;
+  visibility: visible;
+  height: 66px;
+  width: 400px;
+}
+
+.popup-message.hide {
+  top: -66px; /* Position above the viewport when hidden */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.popup-message .message {
+  text-align: center;
+  font-size: 18px;
+  font-weight: normal;
+  color: #000;
+  margin-bottom: 20px;
 }
