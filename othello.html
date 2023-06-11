@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="othelloView.css">
 </head>
 
-<body>
+<body> 
   
     <div class="container">
         <div class="title">Settings</div>
@@ -20,89 +20,36 @@
                 <div class="category">
                   <label for="dot-1">
                     <span class="dot one"></span>
-                    <span class="gender">Human Vs Human</span>
+                    <span class="mode">Human Vs Human</span>
                   </label>
                   <label for="dot-2">
                     <span class="dot two"></span>
-                    <span class="gender">Human Vs Computer</span>
+                    <span class="mode">Human Vs Computer</span>
                   </label>
                   <label for="dot-3">
                     <span class="dot three"></span>
-                    <span class="gender">Computer Vs Computer</span>
+                    <span class="mode">Computer Vs Computer</span>
                   </label>
                 </div>
               </div>
               <br>
               <div class="input-box" id="input-box-1">
                 <span class="details">Difficulty level of player 1</span>
-                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="5" required>
+                <input type="number" id="AI1" name="quantity" placeholder="0" min="0" max="5" >
               </div>
               <div class="input-box" id="input-box-2">
                 <span class="details">Difficulty level of player 2</span>
-                <input type="number" id="AI2" name="quantity" placeholder="0" min="0" max="5" required>
+                <input type="number" id="AI2" name="quantity" placeholder="0" in="0" max="5" >
               </div>
               <div class="input-box" id="input-box-3">
                 <span class="details">Difficulty level of AI</span>
-                <input type="number" id="AI" name="quantity" placeholder="0" min="0" max="5" required>
+                <input type="number" id="AI" name="quantity" onchange="getVal()" placeholder="0" min="0" max="5" required >
               </div>
             </div>
             
-            <script>
-              const dot1 = document.getElementById('dot-1');
-              const dot2 = document.getElementById('dot-2');
-              const dot3 = document.getElementById('dot-3');
-              const inputBox1 = document.getElementById('input-box-1');
-              const inputBox2 = document.getElementById('input-box-2');
-              const inputBox3 = document.getElementById('input-box-3');
-              const AIInput = document.getElementById('AI');
-              const AIInput1 = document.getElementById('AI1');
-              const AIInput2 = document.getElementById('AI2');
-
-              //making sure user can't force input value more than 4
-              AIInput.addEventListener('input', function() {
-                  if (parseFloat(AIInput.value) > 5) {
-                        AIInput.value = '5';
-                                        }});
-              AIInput1.addEventListener('input', function() {
-                  if (parseFloat(AIInput1.value) > 5) {
-                        AIInput1.value = '5';
-                                        }});
-              AIInput2.addEventListener('input', function() {
-                  if (parseFloat(AIInput2.value) > 5) {
-                        AIInput2.value = '5';
-                                        }});
-
-              // greater number to be displayed is 5
-              function toggleInputBoxes() {
-                if (dot1.checked) {
-                  inputBox1.style.display = 'none';
-                  inputBox2.style.display = 'none';
-                  inputBox3.style.display = 'none';
-                } 
-                if(dot2.checked) {
-                  inputBox1.style.display = 'block';
-                  inputBox2.style.display = 'block';
-                  inputBox3.style.display = 'none';
-                }
-                if(dot3.checked)
-                {
-                  inputBox1.style.display = 'none';
-                  inputBox2.style.display = 'none';
-                  inputBox3.style.display = 'block';
-                }
-              }
-            
-              dot1.addEventListener('change', toggleInputBoxes);
-              dot2.addEventListener('change', toggleInputBoxes);
-              dot3.addEventListener('change', toggleInputBoxes);
-            
-              // Initial state
-              toggleInputBoxes();
-            </script>
-
             <div class="buttons">
               <div class="button">
-                <input type="submit" value="Play">
+                <input type="submit" value="Play" onclick="assign()">
               </div>
               <div class="button">
                 <input type="reset" value="Reset" onclick="location.reload()" id="button-reset">  

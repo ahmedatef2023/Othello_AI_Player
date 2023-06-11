@@ -14,7 +14,20 @@ let discs = [
 //----------------------------------------------------------------------
 
 //-------------------------(View)---------------------------------------
-const globalDepth = 4;
+var dot1;
+var dot2;
+var dot3;
+var AIInput;
+var AIInput1;
+var AIInput2;
+
+
+var globalDepth;
+console.log("level",globalDepth);
+var globalDepth1;
+var globalDepth2;
+
+
 let scoreLabel;
 let canMoveLayer;
 let blackBackground;
@@ -23,10 +36,67 @@ let gap = 3;
 let cellWidth = 65;
 let turn = 1;
 let Turn = 'Black';
-let gameMode = 'AI';
+var gameMode;
+console.log("game mode",gameMode);
 
 //initial function for load the App in Browser.
 window.onload = function () {
+    
+              dot1 = document.getElementById('dot-1'); // human vs human
+              dot2 = document.getElementById('dot-2'); // human vs AI
+              dot3 = document.getElementById('dot-3'); // AI vs AI
+              var inputBox1 = document.getElementById('input-box-1'); 
+              var inputBox2 = document.getElementById('input-box-2'); 
+              var inputBox3 = document.getElementById('input-box-3'); 
+              AIInput = document.getElementById('AI');  // level human vs AI
+              
+              AIInput1 = document.getElementById('AI1');// level AI1
+              AIInput2 = document.getElementById('AI2');// level AI2
+
+              //making sure user can't force input value more than 4
+              AIInput.addEventListener('input', function() {
+                  if (parseFloat(AIInput.value) > 5) {
+                    
+                        AIInput.value = '5';
+                        
+                                        }});
+              AIInput1.addEventListener('input', function() {
+                  if (parseFloat(AIInput1.value) > 5) {
+                        AIInput1.value = '5';
+                                        }});
+              AIInput2.addEventListener('input', function() {
+                  if (parseFloat(AIInput2.value) > 5) {
+                        AIInput2.value = '5';
+                                        }});
+
+              // greater number to be displayed is 5
+              function toggleInputBoxes() {
+                if (dot1.checked) {
+                  inputBox1.style.display = 'none';
+                  inputBox2.style.display = 'none';
+                  inputBox3.style.display = 'none';
+                } 
+                if(dot2.checked) {
+                  inputBox1.style.display = 'none';
+                  inputBox2.style.display = 'none';
+                  inputBox3.style.display = 'block';
+                }
+                if(dot3.checked)
+                {
+                  inputBox1.style.display = 'block';
+                  inputBox2.style.display = 'block';
+                  inputBox3.style.display = 'none';
+                }
+              }
+            
+              dot1.addEventListener('change', toggleInputBoxes);
+              dot2.addEventListener('change', toggleInputBoxes);
+              dot3.addEventListener('change', toggleInputBoxes);
+            
+              // Initial state
+              toggleInputBoxes();
+              console.log("finally",AIInput.value)
+            
 	scoreLabel = document.getElementById('score');
 	canMoveLayer = document.getElementById('canMoveLayer');
 	blackBackground = document.getElementById('blackBackground');
@@ -35,6 +105,25 @@ window.onload = function () {
 	drawDiscs();
 	drawCanMoveLayer();
 };
+function getVal() {
+    const val = document.getElementById('AI').value;
+    console.log("new",val);
+  }
+
+function assign(){
+    if (dot1.checked) gameMode='H2H';
+    else if (dot2.checked){
+        gameMode='H2A';
+        globalDepth=AIInput;
+    } 
+    else if (dot3.checked){
+        gameMode='A2A';
+        globalDepth1=AIInput1;
+        globalDepth2=AIInput2;
+    } 
+
+    
+}
 
 //draw 64 green Square by js DOM.
 function drawGreenSquares() {
@@ -124,8 +213,7 @@ function checkWinner() {
 	const [black, white] = reWriteScore();
 	if (black + white === 64) {
 		const winner = black > white ? 'black' : black < white ? 'white' : 'tie';
-		console.log(`Game Over the winner is ${winner}`);
-		alert(`Game Over the winner is ${winner}`);
+		showPopupMessage(winner);
 		return winner;
 	}
 	return 1;
@@ -143,7 +231,7 @@ function clickedSquare(row, column) {
 		if (turn === 1 && canMove(2)) {
 			turn = 2;
 			switch (gameMode) {
-				case 'AI':
+				case 'H2A':
 					setTimeout(function () {
 						makeAIMove();
 					}, 100);
@@ -156,7 +244,7 @@ function clickedSquare(row, column) {
 		else if (turn === 2 && !canMove(1)) {
 			turn = 2;
 			switch (gameMode) {
-				case 'AI':
+				case 'H2A':
 					setTimeout(function () {
 						makeAIMove();
 					}, 100);
@@ -350,7 +438,6 @@ function makeAIMove() {
 				else if (score > bestScore) {
 					bestScore = score;
 					bestMove = { row, column };
-					console.log(bestMove);
 				}
 				// Undo the move
 				tempBoard[row][column] = 0;
@@ -369,7 +456,7 @@ function makeAIMove() {
 		else if (turn === 2 && !canMove(1)) {
 			turn = 2;
 			switch (gameMode) {
-				case 'AI':
+				case 'H2A':
 					setTimeout(() => makeAIMove(), 100);
 					break;
 				default:
