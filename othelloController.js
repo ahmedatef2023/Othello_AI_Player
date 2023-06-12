@@ -689,15 +689,20 @@ function minimax(board, depth, maximizingPlayer) {
 function dynamicDepth(){
 	let moves=0;
 	let depth = (globalDepth || globalDepth1);
-	for (let row = 0; row < 8; row++) {
-		for (let column = 0; column < 8; column++) {
-			if (discs[row][column] === 0 && canClickSpot(2, row, column))
-			moves=moves+1;
+	if(depth>=4)
+	{
+		for (let row = 0; row < 8; row++) {
+			for (let column = 0; column < 8; column++) {
+				if (discs[row][column] === 0 && canClickSpot(2, row, column))
+					moves=moves+1;
+			}
 		}
+		if(moves >=5 && moves <8)
+			depth=depth-1;
+		if(moves>=8)
+			depth=depth-2;
+	
 	}
-	if(moves >5 && moves <8)
-	depth=depth-1;
-	if(moves>=8)
-	depth=depth-2;
 	return depth;
+	
 }
