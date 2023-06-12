@@ -14,7 +14,7 @@ let discs = [
 //----------------------------------------------------------------------
 
 //-------------------------(View)---------------------------------------
-const globalDepth = 4;
+const globalDepth =4;
 let scoreLabel;
 let canMoveLayer;
 let blackBackground;
@@ -337,6 +337,7 @@ function getAffectedDiscs(id, row, column) {
 function makeAIMove() {
 	let bestScore = -Infinity;
 	let bestMove;
+	let depth = dynamicDepth();
 
 	for (let row = 0; row < 8; row++) {
 		for (let column = 0; column < 8; column++) {
@@ -345,7 +346,7 @@ function makeAIMove() {
 				flipDiscs(affectedDiscs);
 				let tempBoard = JSON.parse(JSON.stringify(discs));
 				tempBoard[row][column] = 2;
-				const score = minimax(tempBoard, globalDepth, false);
+				const score = minimax(tempBoard, depth, false);
 				if (score === 'white') bestMove = { row, column };
 				else if (score > bestScore) {
 					bestScore = score;
@@ -383,6 +384,23 @@ function makeAIMove() {
 		checkWinner();
 	}
 }
+
+function dynamicDepth(){
+	let moves=0;
+	let depth = globalDepth;
+	for (let row = 0; row < 8; row++) {
+		for (let column = 0; column < 8; column++) {
+			if (discs[row][column] === 0 && canClickSpot(2, row, column))
+			moves=moves+1;
+		}
+	}
+	if(moves >5 && moves <=8)
+	depth=depth-1;
+	if(moves>8)
+	depth=depth-2;
+	return depth;
+}
+
 
 function minimax(board, depth, maximizingPlayer) {
 	const result = checkWinner();
