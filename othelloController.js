@@ -57,12 +57,12 @@ window.onload = function () {
                         
                                         }});
               AIInput1.addEventListener('input', function() {
-                  if (parseFloat(AIInput1.value) > 5) {
-                        AIInput1.value = '5';
+                  if (parseFloat(AIInput1.value) > 8) {
+                        AIInput1.value = '8';
                                         }});
               AIInput2.addEventListener('input', function() {
-                  if (parseFloat(AIInput2.value) > 5) {
-                        AIInput2.value = '5';
+                  if (parseFloat(AIInput2.value) > 8) {
+                        AIInput2.value = '8';
                                         }});
 
               // greater number to be displayed is 5
@@ -116,30 +116,62 @@ function Overlayhide() { //hides the overlay that prevent the user to click on t
 	overlay.style.display = 'block';
 	  }
 
-function assign(event){
+async function assign(event){
 	event.preventDefault();
 	Overlayhide();
 	AIInput = document.getElementById('AI');  // level human vs AI          
     AIInput1 = document.getElementById('AI1');// level AI1
     AIInput2 = document.getElementById('AI2');// level AI2
+	
+	if(AIInput.value == "")
+	AIInput.value =1;
+	if(AIInput1.value == "")
+	AIInput1.value =1;
+	if(AIInput2.value == "")
+	AIInput2.value =1;
 
+	console.log("asdas",AIInput.value);
     if (dot1.checked) gameMode='H2H';
-    else if (dot2.checked){
+    if (dot2.checked){
         gameMode='H2A';
         globalDepth=AIInput.value;
     } 
-    else if (dot3.checked){
+    if (dot3.checked){
         gameMode='A2A';
         globalDepth1=AIInput1.value;
         globalDepth2=AIInput2.value;
     } 
-	console.log("level",globalDepth);
-	console.log("Game Mode",gameMode);
-    console.log("level A1",globalDepth1);
-    console.log("level A2",globalDepth2);
-	
+		if(gameMode=="A2A")
+		{
+			[b,w]=reWriteScore();
+			let i=1;
+			showPopupMessage("The Code is delayed by 1 sec ,To See Turns")
+			while(b+w != 64)
+			{
+				(function() {
+				
+					if(canMove(1) ||canMove(2))
+					{
+						if(canMove(1))
+								{makeAIMove2();console.log("Entered turn =%d canMove(1)=%d",turn,canMove(1))}
+						if(canMove(2))
+							{makeAIMove1(); console.log("Entered turn =%d canMove(2)=%d",turn,canMove(2))}
+						console.log("Entered");
+					}
+				  })();
+				console.log("iteration",i);
+				 await delay(1000);
+				 [b,w]=reWriteScore();
+				 i++;
+			}
+
+		}
 
 }
+
+function delay(ms) {
+	return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
 function showPopupMessage(winnerName) {
 	var popupMessage = document.querySelector('.popup-message');
@@ -167,6 +199,8 @@ function showPopupMessage(winnerName) {
 	drawDiscs();
 	drawCanMoveLayer();
 	Overlayshow();
+	turn =1;
+	reWriteScore();
   }
 
 //draw 64 green Square by js DOM.
@@ -265,7 +299,6 @@ function checkWinner() {
 
 //click on green square && flip discs && finish of Game if all green square is filled.
 function clickedSquare(row, column) {
-    console.log(turn)
 	if (discs[row][column] !== 0) {
 		return;
 	}
@@ -515,7 +548,7 @@ function getAffectedDiscs(id, row, column) {
 //------------------------------AI----------------------------------------
 
 
-function makeAIMove1() {
+function makeAIMove1() { //white
 	let bestScore = -Infinity;
 	let bestMove;
 	let depth = dynamicDepth();
@@ -528,6 +561,7 @@ function makeAIMove1() {
 				let tempBoard = JSON.parse(JSON.stringify(discs));
 				tempBoard[row][column] = 2;
 				const score = minimax(tempBoard, depth, false);
+				console.log("Score WHite",score);
 				if (score === 'white') bestMove = { row, column };
 				else if (score > bestScore) {
 					bestScore = score;
@@ -539,7 +573,7 @@ function makeAIMove1() {
 			}
 		}
 	}
-
+	console.log("Bestmove white",bestMove);
 	if (bestMove) {
 		let affectedDiscs = getAffectedDiscs(2, bestMove.row, bestMove.column);
 		flipDiscs(affectedDiscs);
@@ -578,10 +612,10 @@ function makeAIMove1() {
 		checkWinner();
 	}
 }
-function makeAIMove2() {
+function makeAIMove2() { // black
 	let bestScore = -Infinity;
 	let bestMove;
-	let depth = dynamicDepth();
+	let depth = globalDepth1;
 
 	for (let row = 0; row < 8; row++) {
 		for (let column = 0; column < 8; column++) {
@@ -591,6 +625,7 @@ function makeAIMove2() {
 				let tempBoard = JSON.parse(JSON.stringify(discs));
 				tempBoard[row][column] = 1;
 				const score = minimax(tempBoard, depth, false);
+				
 				if (score === 'black') bestMove = { row, column };
 				else if (score > bestScore) {
 					bestScore = score;
@@ -688,7 +723,7 @@ function minimax(board, depth, maximizingPlayer) {
 }
 function dynamicDepth(){
 	let moves=0;
-	let depth = (globalDepth || globalDepth1);
+	let depth = (globalDepth || globalDepth2);
 	if(depth>=4)
 	{
 		for (let row = 0; row < 8; row++) {
